@@ -1,0 +1,17 @@
+---
+- name: create config directory
+  become: true
+  file: path={{app_root}}/shared/config owner={{server_user}} group={{server_user}} recurse=yes state=directory
+
+- name: copy database.yml
+  template: src=database.yml dest={{app_root}}/shared/config/database.yml owner={{server_user}} group={{server_user}}
+
+- name: copy secrets.yml
+  template: src=secrets.yml dest={{app_root}}/shared/config/secrets.yml owner={{server_user}} group={{server_user}}
+
+- name: update app root directory permissions
+  become: true
+  file: path={{app_root}} owner={{server_user}} group={{server_user}} recurse=yes state=directory
+
+- name: add symlink to app root
+  file: src={{app_root}} dest=/home/{{server_user}}/app owner={{server_user}} group={{server_user}} state=link

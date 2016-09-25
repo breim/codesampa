@@ -1,0 +1,23 @@
+---
+
+- name: Set nginx configuration file
+  template:
+    src: nginx.conf
+    dest: '{{ passenger_nginx_path }}/nginx.conf'
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart_nginx
+
+- name: remove default config file
+  become: true
+  shell: /bin/rm  /etc/nginx/sites-enabled/*
+
+- name: Set passenger configuration file
+  template:
+    src: app.conf
+    dest: '/etc/nginx/sites-enabled/{{ app_name }}.conf'
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart_nginx

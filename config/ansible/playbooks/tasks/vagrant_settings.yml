@@ -1,0 +1,3 @@
+---
+- name: cd to vagrant directory by default
+  lineinfile: line="cd /vagrant" dest=/home/vagrant/.profile state=present

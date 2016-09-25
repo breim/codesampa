@@ -1,0 +1,69 @@
+syntax enable
+
+set incsearch
+set ignorecase
+set smartcase
+set showmatch
+set hlsearch
+set gdefault
+set wildmenu
+set wildmode=list:longest,full
+set wildignore+=*/.tmp/*,*.so,*.swp,*.zip,*.git
+set shellpipe=>
+
+" Tabbing and indents
+set autoindent
+set smartindent
+set expandtab
+set shiftwidth=2
+set scrolloff=3
+set softtabstop=2
+set tabstop=8
+set shiftround
+
+" Formatting, layout, misc tweeks
+set fileencoding=utf-8
+set encoding=utf-8
+set backspace=indent,eol,start
+set autoread
+set autowrite
+set number
+set ruler
+set cursorline
+set cursorcolumn
+" set colorcolumn=80
+set visualbell
+set showcmd
+set laststatus=2
+set showmode!
+set wrap
+set linebreak
+let &showbreak = '↪ '
+set listchars=tab:▸\ ,trail:·,eol:¬
+
+" Makes things faster?
+set notimeout
+set ttimeout
+set ttimeoutlen=10
+set lazyredraw
+
+" Better completion
+set complete=.,w,b,u,t
+set completeopt=longest,menuone,preview
+
+" Backups, swapfiles, views
+set backup
+set noswapfile
+set history=1000
+set undofile
+set undoreload=10000
+set viewoptions=cursor,folds
+
+set undodir=~/.vim/tmp/undo//
+set backupdir=~/.vim/backup//
+set directory=~/.vim/tmp/swap//
+set viewdir=~/.vim/tmp/view//
+set viminfo+=n$HOME/.vim/tmp/.viminfo
+
+" Don't try to highlight lines longer than 800 characters.
+set synmaxcol=800

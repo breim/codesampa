@@ -1,0 +1,6 @@
+---
+- name: create server user
+  user: name={{server_user}} shell=/bin/bash generate_ssh_key=yes ssh_key_bits=2048
+
+- name: allow server user sudo commands without password
+  action: lineinfile dest=/etc/sudoers regexp="^root" line="root ALL=(ALL:ALL) ALL\n{{server_user}} ALL=(ALL) NOPASSWD:ALL" state=present

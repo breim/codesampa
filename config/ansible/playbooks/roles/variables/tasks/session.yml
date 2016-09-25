@@ -1,0 +1,27 @@
+---
+- name: check if .session_vars exists
+  stat: path=/home/{{server_user}}/.session_vars
+  register: session_vars
+
+- name: delete .session_vars if exists
+  shell: rm /home/{{server_user}}/.session_vars
+  when: session_vars.stat.exists == true
+
+- name: add environment variables to .session_vars
+  lineinfile:
+    dest=/home/{{server_user}}/.session_vars
+    line='{{item}}'
+    owner={{server_user}}
+    insertafter=EOF
+    create=true
+  with_items:
+    - 'export APP_NAME={{app_name}}'
+    - 'export APP_ROOT={{app_root}}'
+    - 'export RAILS_ENV={{rails_env}}'
+    - 'export DATABASE_NAME={{database_name}}'
+    - 'export DATABASE_USER={{database_user}}'
+    - 'export DATABASE_PASSWORD={{database_password}}'
+    - 'export SECRET_KEY_BASE={{secret_key_base}}'
+
+- name: source .session_vars from .bashrc
+  lineinfile: dest=/home/{{server_user}}/.bashrc insertafter=EOF line='source ~/.session_vars'

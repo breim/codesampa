@@ -1,0 +1,8 @@
+---
+- name: setup firewall
+  shell: ufw allow 22; ufw allow 1224; ufw allow 80; ufw allow 443
+  when: inventory_hostname == 'root'
+
+- name: enable firewall
+  shell: echo 'y' | ufw enable
+  when: inventory_hostname == 'root'

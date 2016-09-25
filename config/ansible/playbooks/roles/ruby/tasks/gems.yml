@@ -1,0 +1,16 @@
+---
+- name: set gemrc
+  copy: src=gemrc dest=/home/{{server_user}}/.gemrc owner={{server_user}} group={{server_user}} mode=0644
+
+- name: install bundler
+  shell: RBENV_ROOT={{rbenv_root}} rbenv exec gem install bundler --no-ri --no-rdoc
+
+- name: create bundle config
+  file: path=/home/{{server_user}}/.bundle/
+        state=directory
+        owner={{server_user}}
+        group={{server_user}}
+        mode=0775
+
+- name: set bundle config
+  copy: src=bundle_config dest=/home/{{server_user}}/.bundle/config owner={{server_user}} group={{server_user}} mode=0644

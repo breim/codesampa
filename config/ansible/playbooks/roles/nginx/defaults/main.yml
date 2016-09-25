@@ -1,0 +1,24 @@
+---
+
+passenger_nginx_apt_key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search=0xAC40B2F7'
+passenger_nginx_repo: 'deb https://oss-binaries.phusionpassenger.com/apt/passenger {{ ansible_lsb.codename }} main'
+passenger_nginx_apt_https:
+  - apt-transport-https
+  - ca-certificates
+passenger_nginx_apt_pkgs:
+  - name: nginx-extras
+  - name: passenger
+passenger_nginx_pkg_version:
+passenger_nginx_path: /etc/nginx
+passenger_nginx_conf_path: /etc/nginx/conf.d
+passenger_nginx_pkg_state: installed
+passenger_nginx_service_state: started
+passenger_nginx_service_enabled: yes
+passenger_nginx_passenger_config:
+  - 'passenger_root /usr/lib/ruby/vendor_ruby/phusion_passenger/locations.ini;'
+  - 'passenger_ruby /usr/bin/ruby;'
+  - 'passenger_max_pool_size 6;'
+passenger_nginx_custom_directories:
+  - path: '/var/cache/nginx/tmp'
+    owner: 'www-data'
+    group: 'root'

@@ -1,0 +1,4 @@
+---
+postgresql_version: 9.5
+ruby_version: 2.3.0
+rbenv_root: /usr/local/rbenv

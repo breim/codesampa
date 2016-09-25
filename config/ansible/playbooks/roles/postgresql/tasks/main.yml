@@ -1,0 +1,53 @@
+---
+- name: install dependencies
+  action: apt pkg={{item}} state=latest
+  with_items:
+    - python-apt
+    - python-psycopg2
+    - libpq-dev
+
+- name: get postgres apt key
+  apt_key: url=http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc
+
+- name: add apt-get repository for latest postgres
+  apt_repository: repo="deb http://apt.postgresql.org/pub/repos/apt/ {{ansible_lsb.codename}}-pgdg main"
+
+- name: install postgres
+  become: true
+  apt:
+    name: "postgresql-{{postgresql_version}}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: copy pg_hba.conf
+  become: true
+  template: src=pg_hba.conf dest=/etc/postgresql/{{postgresql_version}}/main/pg_hba.conf
+
+- name: set pg_hba.conf permissions
+  become: true
+  file: path=/etc/postgresql/{{postgresql_version}}/main/pg_hba.conf owner=postgres group=postgres mode=0640
+
+- name: start postgresql
+  service: name=postgresql state=started
+
+- name: Install PostgreSQL contribs
+  become: true
+  apt:
+    name: "postgresql-contrib-{{postgresql_version}}"
+  notify: restart postgresql
+
+
+- name: create db user
+  become: true
+  postgresql_user: name={{database_user}} password={{database_password}} role_attr_flags=CREATEDB
+  become_user: postgres
+
+- name: create database
+  become: true
+  postgresql_db: name={{database_name}} owner={{database_user}} encoding=unicode lc_collate=en_US.utf8 lc_ctype=en_US.utf8 template=template0
+  become_user: postgres
+  when: inventory_hostname == 'deploy'
+
+- name: ensure postgres starts on a fresh reboot
+  service: name=postgresql state=started enabled=yes

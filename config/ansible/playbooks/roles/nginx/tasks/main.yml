@@ -1,0 +1,14 @@
+---
+
+- include: package.yml
+  tags: package
+
+- include: configuration.yml
+  tags: configuration
+
+- name: start/stop nginx service
+  service:
+    name: nginx
+    state: '{{ passenger_nginx_service_state }}'
+    enabled: '{{ passenger_nginx_service_enabled }}'
+  tags: service

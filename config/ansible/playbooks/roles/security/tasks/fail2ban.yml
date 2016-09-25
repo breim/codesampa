@@ -1,0 +1,4 @@
+---
+- name: install fail2ban
+  apt: name=fail2ban state=present update_cache=true
+  when: inventory_hostname == 'root'

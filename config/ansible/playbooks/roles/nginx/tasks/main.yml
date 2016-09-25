@@ -1,0 +1,15 @@
+---
+- name: add apt-get repository for latest nginx
+  action: apt_repository repo=ppa:nginx/stable
+
+- name: install nginx
+  apt: pkg=nginx state=present update_cache=true
+
+- name: delete default vhost
+  action: file path=/etc/nginx/sites-enabled/default state=absent
+
+- name: copy nginx conf
+  template: src=platform.conf dest=/etc/nginx/sites-enabled/platform.conf
+
+- name: restart nginx
+  action: service name=nginx pattern=/etc/init.d/nginx state=restarted enabled=yes

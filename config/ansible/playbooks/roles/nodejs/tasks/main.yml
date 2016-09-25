@@ -1,0 +1,6 @@
+---
+- name: add apt-get repository for latest node
+  action: apt_repository repo=ppa:chris-lea/node.js
+
+- name: install node.js
+  apt: pkg=nodejs state=present update_cache=true

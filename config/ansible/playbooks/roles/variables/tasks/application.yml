@@ -1,0 +1,21 @@
+---
+- name: check if .env exists
+  stat: path={{app_root}}/shared/.env/{{rails_env}}_env.yml
+  register: env_file
+
+- name: delete .env if exists
+  shell: rm {{app_root}}/shared/.env/{{rails_env}}_env.yml
+  when: env_file.stat.exists == true
+
+- name: add environment variables to .env
+  lineinfile:
+    dest={{app_root}}/shared/.env/{{rails_env}}_env.yml
+    line='{{item}}'
+    owner={{server_user}}
+    insertafter=EOF
+    create=true
+  with_items:
+    - 'database_name: {{database_name}}'
+    - 'database_user: {{database_user}}'
+    - 'database_password: {{database_password}}'
+    - 'secret_key_base: {{secret_key_base}}'

@@ -1,0 +1,3 @@
+[production]
+root ansible_ssh_host={{server_domain}}
+deploy ansible_ssh_host={{server_domain}} ansible_ssh_port=22

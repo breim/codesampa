@@ -1,0 +1,21 @@
+---
+# Production playbook
+#==========================================================
+- hosts: root
+  become: true
+  user: root
+  roles:
+    - role: user
+    - role: security
+
+- hosts: deploy
+  become: true
+  user: deploy
+  roles:
+    - role: essentials
+    - role: nodejs
+    - role: nginx
+    - role: postgresql
+    - role: ruby
+    - role: variables
+    - role: complete

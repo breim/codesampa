@@ -1,0 +1,32 @@
+---
+- name: install dependencies
+  apt: pkg={{item}} state=present
+  with_items:
+    - libqt4-dev
+    - libssl-dev
+    - libreadline-dev
+    - libffi-dev
+
+- name: install rbenv
+  become: true
+  git: repo=https://github.com/sstephenson/rbenv.git dest={{rbenv_root}}
+
+- name: install ruby-build as rbenv plugin
+  become: true
+  git: repo=https://github.com/sstephenson/ruby-build.git dest={{rbenv_root}}/plugins/ruby-build
+
+- name: change owner of rbenv directory
+  become: true
+  file: path={{rbenv_root}} owner={{server_user}} recurse=yes state=directory
+
+- name: add rbenv symlink
+  file: path=/usr/local/bin/rbenv src={{rbenv_root}}/bin/rbenv state=link
+
+- name: export RBENV_ROOT to profile
+  lineinfile: line='export RBENV_ROOT="{{rbenv_root}}"' dest=/home/{{server_user}}/.profile
+
+- name: export PATH to rbenv bin to profile
+  lineinfile: line='export PATH="{{rbenv_root}}/bin:$PATH"' dest=/home/{{server_user}}/.profile
+
+- name: eval rbenv init
+  lineinfile: line="eval \"$(rbenv init -)\"" dest=/home/{{server_user}}/.profile

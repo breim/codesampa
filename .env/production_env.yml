@@ -1,0 +1,13 @@
+---
+server_user: deploy
+server_domain: 000.000.000
+server_ssh_port: 22
+rails_env: production
+app_name: study
+app_root: /var/www/study
+database_name: study_production
+database_user: postgres
+database_password: PostegresPassword
+app_repo: https://github.com/breim/codesampa.git
+app_repo_branch: master
+secret_key_base:

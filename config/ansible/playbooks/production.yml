@@ -2,8 +2,18 @@
 # Production playbook
 #==========================================================
 - hosts: root
+  gather_facts: False
   become: true
-  user: root
+  user: ubuntu
+  tasks:
+    - name: apt-get update
+      raw: apt-get update -qq
+    - name: Install python 2.7
+      raw: apt-get install -qq python-minimal
+
+- hosts: root
+  become: true
+  user: ubuntu
   roles:
     - role: user
     - role: security
@@ -13,9 +23,9 @@
   user: deploy
   roles:
     - role: essentials
+    - role: ruby
     - role: nodejs
     - role: nginx
     - role: postgresql
-    - role: ruby
     - role: variables
     - role: complete

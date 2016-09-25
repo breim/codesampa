@@ -39,10 +39,12 @@
 
 
 - name: create db user
+  become: true
   postgresql_user: name={{database_user}} password={{database_password}} role_attr_flags=CREATEDB
   become_user: postgres
 
 - name: create database
+  become: true
   postgresql_db: name={{database_name}} owner={{database_user}} encoding=unicode lc_collate=en_US.utf8 lc_ctype=en_US.utf8 template=template0
   become_user: postgres
   when: inventory_hostname == 'deploy'

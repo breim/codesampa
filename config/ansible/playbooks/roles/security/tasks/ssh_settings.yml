@@ -5,21 +5,21 @@
 - name: change permissions on authorized_keys
   file: path=/home/{{server_user}}/.ssh/authorized_keys mode=0400
 
-- name: change ssh port
-  become: true
-  action: lineinfile dest=/etc/ssh/sshd_config regexp="^#?Port" line="Port {{server_ssh_port}}"
-
-- name: disable root user login via ssh
-  become: true
-  action: lineinfile dest=/etc/ssh/sshd_config regexp="^#?PermitRootLogin" line="PermitRootLogin no"
-
-- name: disable password authentication
-  become: true
-  action: lineinfile dest=/etc/ssh/sshd_config regexp="^#?PasswordAuthentication" line="PasswordAuthentication no"
+# - name: change ssh port
+#   become: true
+#   action: lineinfile dest=/etc/ssh/sshd_config regexp="^#?Port" line="Port {{server_ssh_port}}"
+#
+# - name: disable root user login via ssh
+#   become: true
+#   action: lineinfile dest=/etc/ssh/sshd_config regexp="^#?PermitRootLogin" line="PermitRootLogin no"
+#
+# - name: disable password authentication
+#   become: true
+#   action: lineinfile dest=/etc/ssh/sshd_config regexp="^#?PasswordAuthentication" line="PasswordAuthentication no"
 
 - name: allow deploy user login via ssh
   become: true
-  action: lineinfile dest=/etc/ssh/sshd_config insertafter=EOF line="AllowUsers {{server_user}}"
+  action: lineinfile dest=/etc/ssh/sshd_config insertafter=EOF line="AllowUsers {{server_user}} ubuntu"
 
 - name: restart ssh service
   action: service name=ssh state=restarted

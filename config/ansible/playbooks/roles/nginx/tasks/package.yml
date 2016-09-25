@@ -1,0 +1,39 @@
+---
+
+- name: Add key for passenger
+  apt_key:
+    url: '{{ passenger_nginx_apt_key_url }}'
+    state: present
+
+- name: APT via HTTPS
+  apt:
+    pkg: '{{ item }}'
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items: passenger_nginx_apt_https
+
+- name: Add passenger repo
+  apt_repository:
+    repo: '{{ passenger_nginx_repo }}'
+    state: present
+
+- name: Install specific passenger-nginx packages
+  apt:
+    pkg: '{{ item.name }}={{ item.version }}'
+    state: installed
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items: passenger_nginx_apt_pkgs
+  when: item.version is defined
+  notify: restart_nginx
+
+- name: Install current/latest passenger-nginx packages
+  apt:
+    pkg: '{{ item.name }}'
+    state: '{{ passenger_nginx_pkg_state }}'
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items: passenger_nginx_apt_pkgs
+  when: item.version is not defined
+  notify: restart_nginx

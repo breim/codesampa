@@ -16,6 +16,7 @@ gem 'devise'
 gem 'responders'
 gem 'paperclip'
 gem 'bootsy'
+gem 'flash_kick'
 
 group :development, :test do
   gem 'thin'
